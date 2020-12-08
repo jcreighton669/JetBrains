@@ -1,120 +1,144 @@
-# default resources
-state = {"water": 400, "milk": 540, "beans": 120, "money": 550, "cups": 9}
+espresso_water = 250
+espresso_coffee = 16
+espresso_money = 4
 
-# espresso requirements
-espresso = {"water": 250, "milk": 0, "beans": 16, "money": 4}
+latte_water = 350
+latte_milk = 75
+latte_coffee = 20
+latte_money = 7
 
-# latte requirements
-latte = {"water": 350, "milk": 75, "beans": 20, "money": 7}
+cappuccino_water = 200
+cappuccino_milk = 100
+cappuccino_coffee = 12
+cappuccino_money = 6
 
-# cappuccino requirements
-cappuccino = {"water": 200, "milk": 100, "beans": 12, "money": 6}
-
-
-# request
-def choose():
-    user_input = str(input("Write action (buy, fill, take, remaining, exit): "))
-    return user_input
-
-
-def buy():
-    coffee = str(input("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: "))
-    if coffee == "1":
-        buy_espresso()
-    elif coffee == "2":
-        buy_latte()
-    elif coffee == "3":
-        buy_cappuccino()
-    elif coffee == "back":
-        pass
-
-
-def buy_espresso():
-    # Available to make?
-    for k in espresso:
-        if state[k] < espresso[k]:
-            print("Sorry, not enough {}!".format(k))
-            break
-    else:
-        print("I have enough resources, making you a coffee!")
-        # update state according to espresso
-        state["water"] -= espresso["water"]
-        state["milk"] -= espresso["milk"]
-        state["beans"] -= espresso["beans"]
-        state["money"] += espresso["money"]
-        state["cups"] -= 1
-
-
-def buy_latte():
-    for k in latte:
-        if state[k] < latte[k]:
-            print("Sorry, not enough {}!".format(k))
-            break
-    else:
-        print("I have enough resources, making you a coffee!")
-        state["water"] -= latte["water"]
-        state["milk"] -= latte["milk"]
-        state["beans"] -= latte["beans"]
-        state["money"] += latte["money"]
-        state["cups"] -= 1
-
-
-def buy_cappuccino():
-    for k in cappuccino:
-        if state[k] < cappuccino[k]:
-            print("Sorry, not enough {}!".format(k))
-            break
-    else:
-        print("I have enough resources, making you a coffee!")
-        state["water"] -= cappuccino["water"]
-        state["milk"] -= cappuccino["milk"]
-        state["beans"] -= cappuccino["beans"]
-        state["money"] += cappuccino["money"]
-        state["cups"] -= 1
-
-
-def fill():
-    state["water"] += int(input("Write how many ml of water do you want to add: "))
-    state["milk"] += int(input("Write how many ml of milk do you want to add: "))
-    state["beans"] += int(input("Write how many grams of coffee beans do you want to add: "))
-    state["cups"] += int(input("Write how many disposable cups of coffee do you want to add: "))
-
-
-def take():
-    print("I gave you ${}".format(state['money']))
-    state["money"] = 0
+water = 400
+milk = 540
+coffee = 120
+cups = 9
+money = 550
 
 
 def remaining():
-    print('''
-    The coffee machine has:
-    {} ml of water
-    {} ml of milk
-    {} g of coffee beans
-    {} disposable cups
-    ${} dollars of money'''.format(state["water"], state["milk"], state["beans"], state["cups"], state["money"]))
+    print("The coffee machine has:")
+    print(str(water) + " of water")
+    print(str(milk) + " of milk")
+    print(str(coffee) + " of coffee beans")
+    print(str(cups) + " of disposable cups")
+    print(str(money) + " of money")
 
 
-def machine_on():
-    user_input = str(input("Write action (buy, fill, take, remaining, exit): "))
+def buy():
+    global water
+    global milk
+    global coffee
+    global money
+    global cups
+
+    buy_input = input("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu: ")
+
+    if buy_input == "1":
+        if water < espresso_water:
+            print("Sorry, not enough water!")
+        elif coffee < espresso_coffee:
+            print("Sorry, not enough coffee beans!")
+        elif cups < 1:
+            print("Sorry, not enough disposable cups!")
+        else:
+            print("I have enough resources, making you a coffee!")
+            water -= espresso_water
+            coffee -= espresso_coffee
+            cups -= 1
+            money += espresso_money
+
+    elif buy_input == "2":
+        if water < latte_water:
+            print("Sorry, not enough water!")
+        elif milk < latte_milk:
+            print("Sorry, not enough milk!")
+        elif coffee < latte_coffee:
+            print("Sorry, not enough coffee beans!")
+        elif cups < 1:
+            print("Sorry, not enough disposable cups!")
+        else:
+            print("I have enough resources, making you a coffee!")
+            water -= latte_water
+            milk -= latte_milk
+            coffee -= latte_coffee
+            cups -= 1
+            money += latte_money
+
+    elif buy_input == "3":
+        if water < cappuccino_water:
+            print("Sorry, not enough water!")
+        elif milk < cappuccino_milk:
+            print("Sorry, not enough milk!")
+        elif coffee < cappuccino_coffee:
+            print("Sorry, not enough coffee beans!")
+        elif cups < 1:
+            print("Sorry, not enough disposable cups!")
+        else:
+            print("I have enough resources, making you a coffee!")
+            water -= cappuccino_water
+            milk -= cappuccino_milk
+            coffee -= cappuccino_coffee
+            cups -= 1
+            money += cappuccino_money
+
+    elif buy_input == "back":
+            pass
+
+    else:
+        print("error")
+
+
+def fill():
+    global water
+    global milk
+    global coffee
+    global cups
+    fill_water = int(input("Write how many ml of water do you want to add: "))
+    fill_milk = int(input("Write how many ml of milk do you want to add: "))
+    fill_coffee = int(input("Write how many grams of coffee beans do you want to add: "))
+    fill_cups = int(input("Write how many disposable cups of coffee do you want to add: "))
+    water += fill_water
+    milk += fill_milk
+    coffee += fill_coffee
+    cups += fill_cups
+
+
+def take():
+    global money
+    print("I gave you $" + str(money))
+    money = 0
+
+
+while True:
+    user_input = input("Write action (buy, fill, take, remaining, exit): ")
     if user_input == "buy":
+        print("")
         buy()
-        print()
-        machine_on()
-    elif user_input == "fill":
-        fill()
-        print()
-        machine_on()
-    elif user_input == "take":
-        take()
-        print()
-        machine_on()
+        print("")
+
     elif user_input == "remaining":
+        print("")
         remaining()
-        print()
-        machine_on()
+        print("")
+
+    elif user_input == "fill":
+        print("")
+        fill()
+        print("")
+
+    elif user_input == "take":
+        print("")
+        take()
+        print("")
+
     elif user_input == "exit":
-        print("Goodbye")
+        break
 
-
-machine_on()
+    else:
+        print("")
+        print("error")
+        print("")
